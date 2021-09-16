@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 @Database(
-        entities = {},
+        entities = {ChatDao.class},
         version = 1
 )
 public abstract class ChopeChatDB extends RoomDatabase {
