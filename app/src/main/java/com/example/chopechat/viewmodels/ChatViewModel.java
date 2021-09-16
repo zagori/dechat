@@ -1,10 +1,7 @@
 package com.example.chopechat.viewmodels;
 
 import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
 import com.example.chopechat.models.Response;
@@ -24,7 +21,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class ChatViewModel extends ViewModel {
 
     private StateLiveData<Response<List<Friend>>> friends;
-    private MutableLiveData<Response<List<Chat>>> chats;
+    private StateLiveData<Response<List<Chat>>> chats;
 
     @Inject
     ChatRepository chatRepository;
@@ -32,19 +29,38 @@ public class ChatViewModel extends ViewModel {
     @Inject
     CompositeDisposable compositeDisposable;
 
+    public StateLiveData<Response<List<Chat>>> getChats(){
+        if (chats == null){
+            chats = new StateLiveData<>();
+            loadChats();
+        }
 
-    void addFriends(){
-        List<Friend> friends = new ArrayList<>();
-        friends.add(new Friend("Jone"));
-        friends.add(new Friend("Kent"));
+        return chats;
+    }
+
+    private void loadChats(){
         compositeDisposable.add(
-                chatRepository.addFriends(friends)
+                chatRepository.getChats()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe(subscription -> chats.postLoading())
+                        .subscribe(new Consumer<List<Chat>>() {
+                            @Override
+                            public void accept(List<Chat> chats) throws Throwable {
+                                Log.d(this.getClass().getName(), "++> chats: " + chats.toString());
+                            }
+                        })
+        );
+    }
+
+    private void addChats(Chat chat){
+        compositeDisposable.add(
+                chatRepository.addChat(chat)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe()
         );
     }
-
 
     public StateLiveData<Response<List<Friend>>> getFriends(){
         if (friends == null){
@@ -68,6 +84,18 @@ public class ChatViewModel extends ViewModel {
                             }
                         })
                         //.subscribe(onNext ->{}, onError-> {})
+        );
+    }
+
+    private void addFriends(){
+        List<Friend> friends = new ArrayList<>();
+        friends.add(new Friend("Jone"));
+        friends.add(new Friend("Kent"));
+        compositeDisposable.add(
+                chatRepository.addFriends(friends)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe()
         );
     }
 

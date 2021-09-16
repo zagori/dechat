@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
 
 import java.util.List;
@@ -22,5 +23,14 @@ public interface ChatDao {
     Flowable<List<Friend>> getAllFriends();
 
     @Query("DELETE FROM friends_table")
-    Completable deleteAll();
+    Completable deleteAllFriends();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertChat(Chat... chat);
+
+    @Query("SELECT * FROM chats_table")
+    Flowable<List<Chat>> getAllChats();
+
+    @Query("DELETE FROM chats_table")
+    Completable deleteAllChats();
 }

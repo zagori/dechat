@@ -1,21 +1,26 @@
 package com.example.chopechat.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "chats_table")
 public class Chat {
-    private int id;
+    @PrimaryKey(autoGenerate = true) private int id;
     private String message;
     private boolean isSent;
     private long timestamp;
-    private Friend friend;
+    private int friendId;
 
-    public Chat(int id, String message, boolean isSent, long timestamp, Friend friend) {
+    public Chat() {
+    }
+
+    public Chat(int id, String message, boolean isSent, long timestamp, int friendId) {
         this.id = id;
         this.message = message;
         this.isSent = isSent;
         this.timestamp = timestamp;
-        this.friend = friend;
+        this.friendId = friendId;
     }
-
-    public Chat() { }
 
     public int getId() {
         return id;
@@ -49,11 +54,11 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    public Friend getFriend() {
-        return friend;
+    public int getFriendId() {
+        return friendId;
     }
 
-    public void setFriend(Friend friend) {
-        this.friend = friend;
+    public void setFriendId(int friendId) {
+        this.friendId = friendId;
     }
 }

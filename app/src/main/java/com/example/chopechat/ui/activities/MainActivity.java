@@ -31,6 +31,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        viewModel.getChats().observe(this, response -> {
+            switch (response.getStatus()){
+                case LOADING:
+                case SUCCESS:
+                case ERROR:
+                    break;
+            }
+        });
+
         viewModel.init();
     }
 }
