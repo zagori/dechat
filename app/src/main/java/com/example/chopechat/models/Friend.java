@@ -1,20 +1,19 @@
 package com.example.chopechat.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "friends_table")
 public class Friend {
     @PrimaryKey(autoGenerate = true) private int id;
     private String name;
-    private String lastMessage;
+    @Ignore private String lastMessage;
 
     public Friend(){}
 
-    public Friend(int id, String name, String lastMessage) {
-        this.id = id;
+    public Friend(String name) {
         this.name = name;
-        this.lastMessage = lastMessage;
     }
 
     public int getId() {

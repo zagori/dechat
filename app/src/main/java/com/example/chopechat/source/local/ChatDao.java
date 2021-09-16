@@ -22,5 +22,5 @@ public interface ChatDao {
     Flowable<List<Friend>> getAllFriends();
 
     @Query("DELETE FROM friends_table")
-    void deleteAll();
+    Completable deleteAll();
 }
