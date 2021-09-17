@@ -12,6 +12,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 
 @Dao
 public interface ChatDao {
@@ -20,7 +21,7 @@ public interface ChatDao {
     Completable insertFriends(List<Friend> friends);
 
     @Query("SELECT * FROM friends_table")
-    Flowable<List<Friend>> getAllFriends();
+    Observable<List<Friend>> getAllFriends();
 
     @Query("DELETE FROM friends_table")
     Completable deleteAllFriends();

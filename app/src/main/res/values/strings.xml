@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ChopeChat</string>
+
+    <string name="friends_toolbar_title">My Friends</string>
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav_graph"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/friends_fragment">
+
+    <fragment android:id="@+id/friends_fragment"
+        android:name="com.example.chopechat.ui.fragments.FriendsFragment"
+        android:label="fragment_friends"
+        tools:layout="@layout/fragment_friends">
+
+        <action
+            android:id="@+id/friends_to_chats_action"
+            app:destination="@id/chats_fragment"/>
+
+    </fragment>
+
+    <fragment android:id="@+id/chats_fragment"
+        android:name="com.example.chopechat.ui.fragments.ChatsFragment"
+        android:label="fragment_chats"
+        tools:layout="@layout/fragment_chats"/>
+
+</navigation>

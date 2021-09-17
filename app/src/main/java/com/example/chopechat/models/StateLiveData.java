@@ -2,14 +2,12 @@ package com.example.chopechat.models;
 
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.List;
-
-public class StateLiveData<T> extends MutableLiveData<Response<T>> {
+public class StateLiveData<T> extends MutableLiveData<Response> {
     /**
      * Use this to put the Data on a LOADING Status
      */
     public void postLoading() {
-        postValue(new <T>Response<T>().loading());
+        postValue(new Response().loading());
     }
 
     /**
@@ -22,10 +20,10 @@ public class StateLiveData<T> extends MutableLiveData<Response<T>> {
 
     /**
      * Use this to put the Data on a SUCCESS Status
-     * @param data the load returned upon successful network call
+     * @param data the load returned upon successful call
      */
     @SuppressWarnings("unchecked")
-    public void postSuccess(List<T> data) {
+    public void postSuccess(T data) {
         postValue(new Response().success(data));
     }
 }

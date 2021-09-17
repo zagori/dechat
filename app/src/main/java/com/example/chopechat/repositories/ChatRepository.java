@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 
 public class ChatRepository {
 
@@ -23,7 +24,7 @@ public class ChatRepository {
         return chatDao.deleteAllFriends().andThen(chatDao.insertFriends(friends));
     }
 
-    public Flowable<List<Friend>> getFriends(){
+    public Observable<List<Friend>> getFriends(){
         return chatDao.getAllFriends();
     }
 

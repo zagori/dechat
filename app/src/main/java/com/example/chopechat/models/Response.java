@@ -3,14 +3,12 @@ package com.example.chopechat.models;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.List;
-
 public class Response<T> {
     @NonNull
     private Status status;
 
     @Nullable
-    private List<T> data;
+    private T data;
 
     @Nullable
     private Throwable error;
@@ -24,7 +22,7 @@ public class Response<T> {
         return this;
     }
 
-    public Response success(@NonNull List<T> data) {
+    public Response success(@NonNull T data) {
         this.status = Status.SUCCESS;
         this.data = data;
         return this;
@@ -32,7 +30,6 @@ public class Response<T> {
 
     public Response error(@NonNull Throwable error) {
         this.status = Status.ERROR;
-        this.data = null;
         this.error = error;
         return this;
     }
@@ -43,7 +40,7 @@ public class Response<T> {
     }
 
     @Nullable
-    public List<T> getData() {
+    public T getData() {
         return data;
     }
 

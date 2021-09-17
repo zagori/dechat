@@ -4,24 +4,22 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
-import com.example.chopechat.models.Response;
 import com.example.chopechat.models.StateLiveData;
 import com.example.chopechat.repositories.ChatRepository;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChatViewModel extends ViewModel {
 
-    private StateLiveData<Response<List<Friend>>> friends;
-    private StateLiveData<Response<List<Chat>>> chats;
+    public StateLiveData<List<Friend>> friendsLiveData = new StateLiveData<>();
+    private StateLiveData<List<Chat>> chatsLiveData = new StateLiveData<>();
 
     @Inject
     ChatRepository chatRepository;
@@ -29,21 +27,12 @@ public class ChatViewModel extends ViewModel {
     @Inject
     CompositeDisposable compositeDisposable;
 
-    public StateLiveData<Response<List<Chat>>> getChats(){
-        if (chats == null){
-            chats = new StateLiveData<>();
-            loadChats();
-        }
-
-        return chats;
-    }
-
-    private void loadChats(){
+    private void loadChats() {
         compositeDisposable.add(
                 chatRepository.getChats()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(subscription -> chats.postLoading())
+                        .doOnSubscribe(subscription -> chatsLiveData.postLoading())
                         .subscribe(new Consumer<List<Chat>>() {
                             @Override
                             public void accept(List<Chat> chats) throws Throwable {
@@ -53,7 +42,7 @@ public class ChatViewModel extends ViewModel {
         );
     }
 
-    private void addChats(Chat chat){
+    private void addChats(Chat chat) {
         compositeDisposable.add(
                 chatRepository.addChat(chat)
                         .subscribeOn(Schedulers.io())
@@ -62,32 +51,32 @@ public class ChatViewModel extends ViewModel {
         );
     }
 
-    public StateLiveData<Response<List<Friend>>> getFriends(){
-        if (friends == null){
-            friends = new StateLiveData<>();
-            loadFriends();
-        }
-
-        return friends;
-    }
-
-    private void loadFriends(){
+    public void loadFriends() {
         compositeDisposable.add(
                 chatRepository.getFriends()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .doOnSubscribe(subscription -> friends.postLoading())
-                        .subscribe(new Consumer<List<Friend>>() {
+                        .doOnSubscribe(subscription -> friendsLiveData.postLoading())
+                        .subscribeWith(new DisposableObserver<List<Friend>>() {
+
                             @Override
-                            public void accept(List<Friend> friends) throws Throwable {
-                                Log.d(this.getClass().getName(), "++> friends: " + friends.toString());
+                            public void onNext(@NonNull List<Friend> friends) {
+                                friendsLiveData.postSuccess(friends);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                            }
+
+                            @Override
+                            public void onComplete() {
+
                             }
                         })
-                        //.subscribe(onNext ->{}, onError-> {})
         );
     }
 
-    private void addFriends(){
+    private void addFriends() {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Jone"));
         friends.add(new Friend("Kent"));
@@ -99,10 +88,14 @@ public class ChatViewModel extends ViewModel {
         );
     }
 
-    public void init(){
+    public void init() {
         addFriends();
     }
 
 
-
+    @Override
+    protected void onCleared() {
+        if (!compositeDisposable.isDisposed()) compositeDisposable.dispose();
+        super.onCleared();
+    }
 }
