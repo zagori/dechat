@@ -1,5 +1,6 @@
 package com.example.chopechat.viewmodels;
 
+import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
@@ -19,7 +20,7 @@ public class ChatViewModel extends ViewModel {
     public StateLiveData<List<Friend>> friendsLiveData = new StateLiveData<>();
     public StateLiveData<List<Chat>> chatsLiveData = new StateLiveData<>();
 
-    public Friend selectedFriend;// = new Friend();
+    public Friend selectedFriend;
 
     @Inject
     ChatRepository chatRepository;
@@ -33,7 +34,7 @@ public class ChatViewModel extends ViewModel {
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(subscription -> chatsLiveData.postLoading())
-                        .subscribeWith(new DisposableObserver<List<Chat>>(){
+                        .subscribeWith(new DisposableObserver<List<Chat>>() {
 
                             @Override
                             public void onNext(@NonNull List<Chat> chats) {
@@ -77,6 +78,8 @@ public class ChatViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
+                                Log.e("MMMM", "++++> error: " + e.getMessage());
+                                e.printStackTrace();
                             }
 
                             @Override
@@ -87,7 +90,7 @@ public class ChatViewModel extends ViewModel {
         );
     }
 
-    private void addFriends() {
+    public void addRandomFriends() {
         List<Friend> friends = new ArrayList<>();
         friends.add(new Friend("Jone"));
         friends.add(new Friend("Kent"));
@@ -97,10 +100,6 @@ public class ChatViewModel extends ViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe()
         );
-    }
-
-    public void init() {
-        addFriends();
     }
 
 

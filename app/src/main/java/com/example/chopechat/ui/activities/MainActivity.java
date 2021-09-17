@@ -25,19 +25,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
-        /*viewModel.getChatsLiveData().observe(this, response -> {
-            switch (response.getStatus()){
-                case LOADING:
-                    break;
-                case SUCCESS:
-                    break;
-                case ERROR:
-                    break;
-            }
-        });*/
-
-        viewModel.init();
+        // Add Jone and Kent
+        viewModel.addRandomFriends();
     }
 }

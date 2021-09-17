@@ -2,13 +2,13 @@ package com.example.chopechat.models;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 
 @Entity(tableName = "friends_table", primaryKeys = {"friendName"})
 public class Friend {
-    @NonNull private String friendName;
-    @Ignore private String lastMessage;
+    @NonNull
+    private String friendName;
+    private String lastMessage;
+    private long timestamp;
 
     public Friend() {
     }
@@ -17,16 +17,18 @@ public class Friend {
         this.friendName = friendName;
     }
 
-    public Friend(String friendName, String lastMessage) {
+    public Friend(@NonNull String friendName, String lastMessage, long timestamp) {
         this.friendName = friendName;
         this.lastMessage = lastMessage;
+        this.timestamp = timestamp;
     }
 
+    @NonNull
     public String getFriendName() {
         return friendName;
     }
 
-    public void setFriendName(String friendName) {
+    public void setFriendName(@NonNull String friendName) {
         this.friendName = friendName;
     }
 
@@ -36,5 +38,13 @@ public class Friend {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

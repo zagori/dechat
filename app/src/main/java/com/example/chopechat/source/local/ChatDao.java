@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
 import java.util.List;
@@ -16,18 +17,15 @@ public interface ChatDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable insertFriends(List<Friend> friends);
 
-    @Query("SELECT * FROM friends_table")
-    Observable<List<Friend>> getAllFriends();
+    @Update
+    Completable updateFriends(Friend... friends);
 
-    @Query("DELETE FROM friends_table")
-    Completable deleteAllFriends();
+    @Query("SELECT * FROM friends_table ORDER BY timestamp DESC")
+    Observable<List<Friend>> getAllFriends();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable insertChat(Chat... chat);
 
     @Query("SELECT * FROM chats_table WHERE friendName == :friendName")
     Observable<List<Chat>> getChatsWith(String friendName);
-
-    @Query("DELETE FROM chats_table")
-    Completable deleteAllChats();
 }

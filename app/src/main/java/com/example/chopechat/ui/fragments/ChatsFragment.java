@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -32,18 +31,18 @@ public class ChatsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentChatsBinding.inflate(inflater,container,false);
+        binding = FragmentChatsBinding.inflate(inflater, container, false);
+
         binding.toolbar.setTitle(viewModel.selectedFriend.getFriendName());
         binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+
         adapter = new ChatsAdapter();
         binding.recyclerView.setAdapter(adapter);
 
         binding.sendBtn.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.messageInput.getText())){
-                viewModel.addChats(
-                        new Chat(binding.messageInput.getText().toString(), true,
-                        System.nanoTime(),viewModel.selectedFriend.getFriendName())
-                );
+            if (!TextUtils.isEmpty(binding.messageInput.getText())) {
+                viewModel.addChats(new Chat(binding.messageInput.getText().toString(), true,
+                        System.nanoTime(), viewModel.selectedFriend.getFriendName()));
             }
         });
 
@@ -52,15 +51,17 @@ public class ChatsFragment extends Fragment {
         return binding.getRoot();
     }
 
-    void setDataObserver(){
+    void setDataObserver() {
         viewModel.chatsLiveData.observe(requireActivity(), response -> {
-            switch (response.getStatus()){
+            switch (response.getStatus()) {
                 case LOADING:
                     break;
+
                 case SUCCESS:
                     adapter.update((List<Chat>) response.getData());
                     binding.messageInput.setText("");
                     break;
+
                 case ERROR:
                     break;
             }

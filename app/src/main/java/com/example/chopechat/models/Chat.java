@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "chats_table")
 public class Chat {
-    @PrimaryKey(autoGenerate = true) private int id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String message;
     private boolean isSent;
     private long timestamp;
