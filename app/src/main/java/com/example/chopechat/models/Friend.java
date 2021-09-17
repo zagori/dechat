@@ -1,35 +1,33 @@
 package com.example.chopechat.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "friends_table")
+@Entity(tableName = "friends_table", primaryKeys = {"friendName"})
 public class Friend {
-    @PrimaryKey(autoGenerate = true) private int id;
-    private String name;
+    @NonNull private String friendName;
     @Ignore private String lastMessage;
 
-    public Friend(){}
-
-    public Friend(String name) {
-        this.name = name;
+    public Friend() {
     }
 
-    public int getId() {
-        return id;
+    public Friend(String friendName) {
+        this.friendName = friendName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Friend(String friendName, String lastMessage) {
+        this.friendName = friendName;
+        this.lastMessage = lastMessage;
     }
 
-    public String getName() {
-        return name;
+    public String getFriendName() {
+        return friendName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
     }
 
     public String getLastMessage() {

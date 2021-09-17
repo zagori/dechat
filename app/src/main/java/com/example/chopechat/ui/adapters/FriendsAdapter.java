@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.chopechat.databinding.ItemFriendsAdapterBinding;
+import com.example.chopechat.databinding.ItemFriendsBinding;
 import com.example.chopechat.models.Friend;
 import com.example.chopechat.ui.interfaces.FriendViewHolderListener;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     @NonNull
     @Override
     public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FriendViewHolder(ItemFriendsAdapterBinding
+        return new FriendViewHolder(ItemFriendsBinding
                 .inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
@@ -42,19 +42,19 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     }
 
     static class FriendViewHolder extends RecyclerView.ViewHolder{
-        private final ItemFriendsAdapterBinding binding;
+        private final ItemFriendsBinding binding;
 
-        public FriendViewHolder(final ItemFriendsAdapterBinding binding) {
+        public FriendViewHolder(final ItemFriendsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
         void bind(Friend friend, FriendViewHolderListener listener){
-            binding.friendName.setText(friend.getName());
+            binding.friendName.setText(friend.getFriendName());
             binding.lastChat.setText(friend.getLastMessage());
 
             binding.friendCard.setOnClickListener(v -> {
-                listener.onItemClicked(v, getAdapterPosition());
+                listener.onItemClicked(friend);
             });
         }
     }

@@ -16,5 +16,11 @@
 
         <!-- disable dark mode -->
         <item name="android:forceDarkAllowed" tools:ignore="NewApi">false</item>
+
+        <!-- Text input style -->
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense</item>
+
+        <!-- Button style -->
+        <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.TextButton</item>-->
     </style>
 </resources>

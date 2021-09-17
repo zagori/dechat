@@ -2,4 +2,7 @@
     <string name="app_name">ChopeChat</string>
 
     <string name="friends_toolbar_title">My Friends</string>
+    <string name="chats_input_hint">Message..</string>
+    <string name="chats_input_btn">Send</string>
+    <string name="chats_name_me">Me</string>
 </resources>

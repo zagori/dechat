@@ -1,6 +1,5 @@
 package com.example.chopechat.viewmodels;
 
-import android.util.Log;
 import androidx.lifecycle.ViewModel;
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
@@ -12,14 +11,15 @@ import javax.inject.Inject;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.observers.DisposableObserver;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ChatViewModel extends ViewModel {
 
     public StateLiveData<List<Friend>> friendsLiveData = new StateLiveData<>();
-    private StateLiveData<List<Chat>> chatsLiveData = new StateLiveData<>();
+    public StateLiveData<List<Chat>> chatsLiveData = new StateLiveData<>();
+
+    public Friend selectedFriend;// = new Friend();
 
     @Inject
     ChatRepository chatRepository;
@@ -27,22 +27,33 @@ public class ChatViewModel extends ViewModel {
     @Inject
     CompositeDisposable compositeDisposable;
 
-    private void loadChats() {
+    public void loadChats(String friendName) {
         compositeDisposable.add(
-                chatRepository.getChats()
+                chatRepository.getChatsWith(friendName)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe(subscription -> chatsLiveData.postLoading())
-                        .subscribe(new Consumer<List<Chat>>() {
+                        .subscribeWith(new DisposableObserver<List<Chat>>(){
+
                             @Override
-                            public void accept(List<Chat> chats) throws Throwable {
-                                Log.d(this.getClass().getName(), "++> chats: " + chats.toString());
+                            public void onNext(@NonNull List<Chat> chats) {
+                                chatsLiveData.postSuccess(chats);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
                             }
                         })
         );
     }
 
-    private void addChats(Chat chat) {
+    public void addChats(Chat chat) {
         compositeDisposable.add(
                 chatRepository.addChat(chat)
                         .subscribeOn(Schedulers.io())

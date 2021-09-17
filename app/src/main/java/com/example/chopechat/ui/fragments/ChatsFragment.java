@@ -1,66 +1,70 @@
 package com.example.chopechat.ui.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.chopechat.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import com.example.chopechat.databinding.FragmentChatsBinding;
+import com.example.chopechat.models.Chat;
+import com.example.chopechat.ui.adapters.ChatsAdapter;
+import com.example.chopechat.viewmodels.ChatViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ChatsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
 public class ChatsFragment extends Fragment {
+    private ChatViewModel viewModel;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ChatsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ChatsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ChatsFragment newInstance(String param1, String param2) {
-        ChatsFragment fragment = new ChatsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FragmentChatsBinding binding;
+    private ChatsAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        viewModel = new ViewModelProvider(requireActivity()).get(ChatViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chats, container, false);
+        binding = FragmentChatsBinding.inflate(inflater,container,false);
+        binding.toolbar.setTitle(viewModel.selectedFriend.getFriendName());
+        binding.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        adapter = new ChatsAdapter();
+        binding.recyclerView.setAdapter(adapter);
+
+        binding.sendBtn.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(binding.messageInput.getText())){
+                viewModel.addChats(
+                        new Chat(binding.messageInput.getText().toString(), true,
+                        System.nanoTime(),viewModel.selectedFriend.getFriendName())
+                );
+            }
+        });
+
+        setDataObserver();
+
+        return binding.getRoot();
+    }
+
+    void setDataObserver(){
+        viewModel.chatsLiveData.observe(requireActivity(), response -> {
+            switch (response.getStatus()){
+                case LOADING:
+                    break;
+                case SUCCESS:
+                    adapter.update((List<Chat>) response.getData());
+                    binding.messageInput.setText("");
+                    break;
+                case ERROR:
+                    break;
+            }
+        });
+        viewModel.loadChats(viewModel.selectedFriend.getFriendName());
     }
 }

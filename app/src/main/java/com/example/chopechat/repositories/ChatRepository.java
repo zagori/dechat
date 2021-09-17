@@ -3,13 +3,9 @@ package com.example.chopechat.repositories;
 import com.example.chopechat.models.Chat;
 import com.example.chopechat.models.Friend;
 import com.example.chopechat.source.local.ChatDao;
-
 import java.util.List;
-
 import javax.inject.Inject;
-
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 
 public class ChatRepository {
@@ -21,7 +17,7 @@ public class ChatRepository {
     }
 
     public Completable addFriends(List<Friend> friends){
-        return chatDao.deleteAllFriends().andThen(chatDao.insertFriends(friends));
+        return chatDao.insertFriends(friends);
     }
 
     public Observable<List<Friend>> getFriends(){
@@ -29,10 +25,11 @@ public class ChatRepository {
     }
 
     public Completable addChat(Chat chat){
-        return chatDao.insertChat(chat);
+        return chatDao.insertChat(chat).andThen(chatDao.insertChat(new Chat(chat.getMessage(),
+                false,System.nanoTime(), chat.getFriendName())));
     }
 
-    public Flowable<List<Chat>> getChats(){
-        return chatDao.getAllChats();
+    public Observable<List<Chat>> getChatsWith(String friendName){
+        return chatDao.getChatsWith(friendName);
     }
 }

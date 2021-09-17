@@ -9,17 +9,16 @@ public class Chat {
     private String message;
     private boolean isSent;
     private long timestamp;
-    private int friendId;
+    private String friendName;
 
     public Chat() {
     }
 
-    public Chat(int id, String message, boolean isSent, long timestamp, int friendId) {
-        this.id = id;
+    public Chat(String message, boolean isSent, long timestamp, String friendName) {
         this.message = message;
         this.isSent = isSent;
         this.timestamp = timestamp;
-        this.friendId = friendId;
+        this.friendName = friendName;
     }
 
     public int getId() {
@@ -54,11 +53,11 @@ public class Chat {
         this.timestamp = timestamp;
     }
 
-    public int getFriendId() {
-        return friendId;
+    public String getFriendName() {
+        return friendName;
     }
 
-    public void setFriendId(int friendId) {
-        this.friendId = friendId;
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
     }
 }
