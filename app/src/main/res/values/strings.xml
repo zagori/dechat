@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChopeChat</string>
+    <string name="app_name">Dechat</string>
 
     <string name="friends_toolbar_title">My Friends</string>
     <string name="chats_input_hint">Message..</string>

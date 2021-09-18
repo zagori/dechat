@@ -6,7 +6,7 @@
     app:startDestination="@id/friends_fragment">
 
     <fragment android:id="@+id/friends_fragment"
-        android:name="com.example.chopechat.ui.fragments.FriendsFragment"
+        android:name="com.example.dechat.ui.fragments.FriendsFragment"
         android:label="fragment_friends"
         tools:layout="@layout/fragment_friends">
 
@@ -17,7 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/chats_fragment"
-        android:name="com.example.chopechat.ui.fragments.ChatsFragment"
+        android:name="com.example.dechat.ui.fragments.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats"/>
 
