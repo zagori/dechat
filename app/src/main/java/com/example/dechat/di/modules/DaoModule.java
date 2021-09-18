@@ -1,7 +1,8 @@
 package com.example.dechat.di.modules;
 
 import com.example.dechat.source.local.ChatDao;
-import com.example.dechat.source.local.ChopeChatDB;
+import com.example.dechat.source.local.DechatDB;
+
 import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
@@ -11,7 +12,7 @@ public class DaoModule {
 
     @Provides
     @Singleton
-    ChatDao provideChatDao(ChopeChatDB db){
+    ChatDao provideChatDao(DechatDB db){
         return db.getChatDao();
     }
 }

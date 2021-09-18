@@ -10,6 +10,6 @@ import com.example.dechat.models.Friend;
         entities = {Friend.class, Chat.class},
         version = 1, exportSchema = false
 )
-public abstract class ChopeChatDB extends RoomDatabase {
+public abstract class DechatDB extends RoomDatabase {
     public abstract ChatDao getChatDao();
 }
